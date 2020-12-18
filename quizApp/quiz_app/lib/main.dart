@@ -25,24 +25,13 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List<Widget> result = [
-    Icon(
-      Icons.check,
-      color: Colors.green,
-    ),
-    Icon(
-      Icons.close,
-      color: Colors.red,
-    ),
-    Icon(
-      Icons.close,
-      color: Colors.red,
-    ),
-    Icon(
-      Icons.check,
-      color: Colors.green,
-    ),
+  List<Icon> result = [];
+  List<String> Ques = [
+    'You can lead a cow down stairs but not up stairs.',
+    'Approximately one quarter of human bones are in the feet.',
+    'A slug\'s blood is green.',
   ];
+  int index = 0;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -56,7 +45,8 @@ class _QuizPageState extends State<QuizPage> {
                 child: Center(
                     child: Text(
                   // here you have to add your Question
-                  'This is Text',
+
+                  Ques[index % 3],
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 25.0,
@@ -82,6 +72,19 @@ class _QuizPageState extends State<QuizPage> {
                 ),
                 onPressed: () {
                   //User Click true
+                  if (index % 3 == 1 || index % 3 == 2)
+                    result.add(Icon(
+                      Icons.check,
+                      color: Colors.green,
+                    ));
+                  else
+                    result.add(Icon(
+                      Icons.close,
+                      color: Colors.red,
+                    ));
+                  setState(() {
+                    index++;
+                  });
                 },
               ),
             ),
@@ -103,6 +106,19 @@ class _QuizPageState extends State<QuizPage> {
                   ),
                   onPressed: () {
                     //UserInput on False
+                    if (index % 3 == 0)
+                      result.add(Icon(
+                        Icons.check,
+                        color: Colors.green,
+                      ));
+                    else
+                      result.add(Icon(
+                        Icons.close,
+                        color: Colors.red,
+                      ));
+                    setState(() {
+                      index++;
+                    });
                   },
                 )),
           ),
@@ -112,3 +128,9 @@ class _QuizPageState extends State<QuizPage> {
         ]);
   }
 }
+
+/*
+question1: 'You can lead a cow down stairs but not up stairs.', false,
+question2: 'Approximately one quarter of human bones are in the feet.', true,
+question3: 'A slug\'s blood is green.', true,
+*/
