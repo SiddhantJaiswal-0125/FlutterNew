@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'icon_content.dart';
 import 'reusableCard.dart';
 import 'Constants.dart';
+import 'resultpage.dart';
+import 'Calculator.dart';
 
 enum Gender {
   male,
@@ -18,7 +21,10 @@ class _InputPageState extends State<inputpage> {
   Color maleCardColour = inactiveCard;
   Color femaleCardColour = inactiveCard;
   Gender selectedGender;
-  int _curVal = 180;
+
+  double height = 4.0;
+  double htinMtr = 1;
+
   int Weight = 50;
   int age = 19;
   @override
@@ -72,7 +78,7 @@ class _InputPageState extends State<inputpage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'HEIGHT',
+                    'HEIGHT ( in Foot )',
                     style: label,
                   ),
                   Row(
@@ -82,24 +88,27 @@ class _InputPageState extends State<inputpage> {
                     textBaseline: TextBaseline.alphabetic,
                     children: [
                       Text(
-                        _curVal.toString(),
+                        height.toStringAsPrecision(2),
                         style: kNumberTextStyle,
                       ),
                       Text(
-                        'cm',
+                        'ft',
                         style: label,
                       ),
                     ],
                   ),
                   Slider(
-                    value: _curVal.toDouble(),
-                    min: 50.0,
-                    max: 220.0,
+                    value: height,
+                    min: 3.0,
+                    max: 10.0,
                     activeColor: Color(0xFFEB1555),
                     inactiveColor: Color(0xFF8D8E98),
+                    divisions: 70,
+                    label: htinMtr.toStringAsPrecision(3) + ' Meter',
                     onChanged: (double newValue) {
                       setState(() {
-                        _curVal = newValue.round();
+                        height = newValue;
+                        htinMtr = (height * 0.3048);
                       });
                     },
                   ),
@@ -117,7 +126,7 @@ class _InputPageState extends State<inputpage> {
                     cardchild: Column(
                       children: [
                         Text(
-                          'WEIGHT',
+                          'WEIGHT (in kg) ',
                           style: label,
                         ),
                         Text(
@@ -202,18 +211,32 @@ class _InputPageState extends State<inputpage> {
               ],
             ),
           ),
-          Container(
-            child: Center(
+          GestureDetector(
+            onTap: () {
+              Calculator calc = Calculator(height: htinMtr, weight: Weight);
+
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return resultpage(
+                      bmiResult: calc.calculateBMI(),
+                      interpretation: calc.Interpetation(),
+                      restext: calc.getResult(),
+                      sy: calc.symbol());
+                },
+              ));
+            },
+            child: Container(
+              child: Center(
                 child: Text(
-              'Result',
-              style: TextStyle(
-                fontSize: 24.0,
+                  'Calculate',
+                  style: KResult,
+                ),
               ),
-            )),
-            color: bottomContainerColor,
-            margin: EdgeInsets.only(top: 10.0),
-            width: double.infinity,
-            height: bottomContainerHeight,
+              color: bottomContainerColor,
+              margin: EdgeInsets.only(top: 10.0),
+              width: double.infinity,
+              height: bottomContainerHeight,
+            ),
           ),
         ],
       ),
